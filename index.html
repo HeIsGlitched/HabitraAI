@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HabitraAI</title>
-    <link rel="stylesheet" href="style.cs">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -13,11 +13,13 @@
                 <li><a href="#features">Features</a></li>
                 <li> <a href="#working">How it works ?</a></li>
             </ul>
-            <button>Login</button>
-            <button>Get Started</button>
+            <div class="nav-container">
+                <button>Login</button>
+                <button>Get Started</button>
+            </div>
         </nav>
     
-        <section>
+        <section class="hero">
             <h1>Consistency made easy for habits</h1>
             <p>
                 Track habits, build discipline, and be Consistent
@@ -27,55 +29,67 @@
     </header>
 
     <main>
-        <section id="features">
+        <section id="features" class="features">
             <h2>Features</h2>
-            <div>
-                <h3>Track habits</h3>
-                <p>Monitor your habits daily.</p>
-            </div>
-            <div>
-                <h3>AI insights</h3>
-                <p>Get smart recommendations based on your routine</p>
-            </div>
-            <div>
-                <h3>Streak system</h3>
-                <p>Build streak and show yourself proof</p>
+            <div class="feature-container">
+                <div class="feature-card">
+                    <h3>Track habits</h3>
+                    <p>Monitor your habits daily.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>AI insights</h3>
+                    <p>Get smart recommendations based on your routine</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Streak system</h3>
+                    <p>Build streak and show yourself proof</p>
+                </div>
             </div>
         </section>
     
-        <section id="working">
+        <section id="working" class="working">
             <h2>How it works?</h2>
-            <div>
-                <h3>1.Create habits</h3>
-                <p>Add or delete habits</p>
-            </div>
-            <div>
-                <h3>2.Track daily</h3>
-                <p>Mark your completed habits</p>
-            </div>
-            <div>
-                <h3>3.Ai analytics</h3>
-                <p>use AI to get your insights and improve</p>
+            <div class="working-container">
+                <div class="working-card">
+                    <h3>1</h3>
+                    <p>Create habits</p>
+                    <p>Add or delete habits</p>
+                </div>
+                <div class="working-card">
+                    <h3>2</h3>
+                    <p>Track daily</p>
+                    <p>Mark your completed habits</p>
+                </div>
+                <div class="working-card">
+                    <h3>3</h3>
+                    <p>Ai analytics</p>
+                    <p>use AI to get your insights and improve</p>
+                </div>
             </div>
         </section>
     
-        <section>
+        <section class="testimonial">
             <h2>What users say ? </h2>
-            <blockquote>
-                It's simple, effective and helped me in building my novel fetish
-            </blockquote>
-            <blockquote>
-                AI is super good, it told me exactly what i wanted to hear, don't watch youtube while doing your habits
-            </blockquote>
+            <div class="testimonial-container">
+                <blockquote class="testimonial-card">
+                    It's simple, effective and helped me in building my chess fetish.
+                    <h4>~Suraj</h4>
+                </blockquote>
+            
+                <blockquote class="testimonial-card">
+                    AI is super good, it told me exactly what i wanted to hear, don't watch youtube while studying.
+                    <h4>~Divyansh</h4>
+                </blockquote>
+            </div>
         </section>
         
-        <section>
+        <section class="cta">
             <h2>Feeling motivated enough ?</h2>
             <button>Start here</button>
         </section>
     </main>
 
-    <footer>
+    <footer class="footer">
         <p>© 2026 HabitraAI</p>
     </footer>
 </body>

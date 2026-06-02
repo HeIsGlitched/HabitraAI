@@ -1,0 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: black;
+    color: white;
+}
+ul{
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+button{
+    padding : 10px 16px;
+    border: 1px solid black;
+    background-color: white;
+    cursor: pointer;
+
+}
+.hero{
+    text-align: center;
+    padding: 100px 20px;
+}
+.hero h1{
+    font-size: 48px;
+    margin-bottom: 20px;
+    max-width: 700px;
+    margin: 0 auto 20px;
+}
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.features {
+    padding: 80px 40px;
+}
+.features h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 32px;
+}
+.feature-container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.feature-card {
+    border: 1px solid black;
+    padding: 30px;
+    width: 300px;
+}
+.feature-card h3 {
+    margin-bottom: 10px;
+}
+.working{
+    padding: 80px 40px;
+}
+.working h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 32px;
+}
+.working-container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.working-card{
+    border: 1px solid black;
+    padding: 30px;
+    width: 300px;
+}
+.working-card h3 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+.working-card p{
+    text-align: center;
+}
+.testimonial{
+    padding: 80px 40px;
+}
+.testimonial h2{
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 32px;
+}
+.testimonial-container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-style: italic;
+}
+.testimonial-card{
+    line-height: 1.6;
+    border: 1px solid black;
+    padding: 30px;
+    width: 350px;
+}
+.testimonial-card h4{
+    text-align: end;
+    margin-top: 30px;
+}
+.cta{
+    border-top: 1px solid black;
+    padding: 80px 40px;
+    text-align: center;
+}
+.cta h2{
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+.footer{
+    padding: 30px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-size: 14px;
+}
+button:hover{
+    background-color: black;
+    color: white;
+}
+.nav-container {
+    display: flex;
+    gap: 10px;
+}
+.working-card p:first-of-type {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
