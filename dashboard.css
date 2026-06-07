@@ -1,0 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+}
+header{
+    background-color: black;
+    color: white;
+    padding :20px;
+}
+main{
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+main h2{
+    margin-bottom: 20px;
+}
+.streak-card,
+.habit-card,
+.progress{
+    border: 1px solid black;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.habits{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.habit-item{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.habit-card h3{
+    margin-bottom: 20px;
+}
+.progress h2{
+    margin-bottom: 0;
+}
