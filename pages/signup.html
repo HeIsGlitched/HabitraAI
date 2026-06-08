@@ -2,27 +2,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - HabitraAI</title>
-    <link rel="stylesheet" href="login.css">
+    <title>Signup - HabitraAI</title>
+    <link rel="stylesheet" href="../css/signup.css">
 </head>
 <body>
-    <section class="login">
-        <div class="login-container">
+    <section class="signup">
+        <div class="signup-container">
             <h1>HabitraAI</h1>
-            <h2>Welcome Back</h2>
+            <h2>Create Account</h2>
             <form>
+                <label> Username</label>
+                <input type="text" placeholder="Enter username" required>
+
                 <label>Email</label>
                 <input type="email" placeholder="Enter email" required>
+
                 <label>Password</label>
                 <input type="password" placeholder="Enter password" required>
-                <button>Login</button>
+
+                <button>Sign Up</button>
                 <p>
-                    Don't have an account?
-                    <a href="signup.html">Sign Up</a>
+                    Already have an account ?
+                    <a href="login.html">Login</a>
                 </p>
-                <p><a href="#">Forgot Password?</a></p>
+
             </form>
         </div>
+
     </section>
+    <script src="../js/signup.js"></script>
 </body>
 </html>
