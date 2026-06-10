@@ -32,10 +32,17 @@ addHabitBtn.addEventListener("click", function(){
         newHabit.innerHTML = `
         <input type="checkbox">
         <label>${habitText}</label>
+        <button type="button" class="delete-btn">Delete</button>
         `;
         habitsContainer.appendChild(newHabit);//add this newhabit(div) into habits container
         const newCheckbox = newHabit.querySelector("input"); //find the input in div we created above
         newCheckbox.addEventListener("change", updateProgress); //if the state of input of div we selected changes, run the function
+        const newDeleteButton = newHabit.querySelector(".delete-btn");
+        newDeleteButton.addEventListener("click", function(){
+            const habitItem = newDeleteButton.parentElement;
+            habitItem.remove();
+            updateProgress();
+        });
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
         habitInput.value = ""; // this is used to remove the habit still written inside the input box after clicking add button
     }
@@ -43,3 +50,14 @@ addHabitBtn.addEventListener("click", function(){
         alert("Please enter a habit");
     }
 } );
+
+//for deleting habits
+const deleteButtons = document.querySelectorAll(".delete-btn"); // select all delete buttons
+deleteButtons.forEach(function(button){
+    button.addEventListener("click", function(){
+        const habitItem = button.parentElement;
+        habitItem.remove();
+        updateProgress();
+    });
+});
+
