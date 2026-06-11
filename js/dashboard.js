@@ -61,3 +61,9 @@ deleteButtons.forEach(function(button){
     });
 });
 
+//for logging out
+const logout_btn = document.querySelector("#logout-btn");
+logout_btn.addEventListener("click", function(){
+    window.location.href = "../index.html";
+})
+

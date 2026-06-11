@@ -13,6 +13,10 @@ header{
     background-color: black;
     color: white;
     padding :20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 main{
     padding: 40px;
@@ -67,4 +71,12 @@ main h2{
 }
 .delete-btn{
     padding: 6px 12px;
+}
+
+#logout-btn{
+    padding: 10px 15px;
+    border: 1px solid white;
+    background-color: black;
+    color: white;
+    cursor: pointer;
 }
