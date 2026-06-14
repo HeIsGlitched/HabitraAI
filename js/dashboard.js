@@ -22,18 +22,21 @@ const habitInput = document.querySelector("#habit-input");
 const addHabitBtn = document.querySelector("#add-habit-btn");
 const habitsContainer = document.querySelector(".habits");
 //function for adding habits
-function createHabit(habitText){
+function createHabit(habitText, checked = false){
      const newHabit = document.createElement("div");//create a div 
         newHabit.classList.add("habit-item");// put class on that div
         //providing the inner HTML of div with class = habit-item
         newHabit.innerHTML = `
-        <input type="checkbox">
+        <input type="checkbox" ${checked ? "checked" : ""}>
         <label>${habitText}</label>
         <button type="button" class="delete-btn">Delete</button>
         `;
         habitsContainer.appendChild(newHabit);//add this newhabit(div) into habits container
         const newCheckbox = newHabit.querySelector("input"); //find the input in div we created above
-        newCheckbox.addEventListener("change", updateProgress); //if the state of input of div we selected changes, run the function
+        newCheckbox.addEventListener("change", function(){
+            updateProgress();
+            saveHabits();
+        }); //if the state of input of div we selected changes, run the function
         const newDeleteButton = newHabit.querySelector(".delete-btn");
         newDeleteButton.addEventListener("click", function(){
             const habitItem = newDeleteButton.parentElement;
@@ -43,7 +46,6 @@ function createHabit(habitText){
         });
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
 }
-
 addHabitBtn.addEventListener("click", function(){
 
     const habitText = habitInput.value;
@@ -73,18 +75,22 @@ logout_btn.addEventListener("click", function(){
 //we are putting this in a function bcuz we need to call it everytime the user add or deletes the habit, otherwise it'll only run after the page loads
 function saveHabits(){
     let arr =[];
-    const allHabits = document.querySelectorAll("label");
-    allHabits.forEach(function(habit){
-        arr.push(habit.textContent); // we use textContent to only get the value of the label
+    const habitItem = document.querySelectorAll(".habit-item");
+    habitItem.forEach(function(habit){
+        const label = habit.querySelector("label");
+        const checkbox = habit.querySelector("input");
+        arr.push({
+            text : label.textContent,
+            checked: checkbox.checked
+        }); // we use textContent to only get the value of the label
     })
-    const storeHabits = JSON.stringify(arr);
-    localStorage.setItem("Habits",storeHabits);
+    localStorage.setItem("Habits",JSON.stringify(arr));
 }
 
 const habits = JSON.parse(localStorage.getItem("Habits"));
 if(habits){
     habits.forEach(function(habit){
-        createHabit(habit);
+        createHabit(habit.text, habit.checked);
     });
 
 }
