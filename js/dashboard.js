@@ -29,6 +29,7 @@ function createHabit(habitText, checked = false){
         newHabit.innerHTML = `
         <input type="checkbox" ${checked ? "checked" : ""}>
         <label>${habitText}</label>
+        <button type="button" class="edit-btn">Edit</button>
         <button type="button" class="delete-btn">Delete</button>
         `;
         habitsContainer.appendChild(newHabit);//add this newhabit(div) into habits container
@@ -38,12 +39,24 @@ function createHabit(habitText, checked = false){
             saveHabits();
         }); //if the state of input of div we selected changes, run the function
         const newDeleteButton = newHabit.querySelector(".delete-btn");
+
+        //edit habits
+        const editButton = newHabit.querySelector(".edit-btn");
+        editButton.addEventListener("click", function(){
+            const label = newHabit.querySelector("label");
+            const newText = prompt("Edit habit:", label.textContent);
+            if(newText!=null && newText!=""){
+                label.textContent = newText;
+                saveHabits();
+            }
+        })
         newDeleteButton.addEventListener("click", function(){
             const habitItem = newDeleteButton.parentElement;
             habitItem.remove();
             updateProgress();
             saveHabits();
         });
+
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
 }
 addHabitBtn.addEventListener("click", function(){

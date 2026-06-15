@@ -80,3 +80,6 @@ main h2{
     color: white;
     cursor: pointer;
 }
+.edit-btn{
+    padding: 6px 12px;
+}
