@@ -110,3 +110,15 @@ if(habits){
 
 
 
+//testing
+const testBtn = document.getElementById("test-btn");
+
+testBtn.addEventListener("click", async () => {
+    const response = await fetch("http://localhost:5000/api/habits");
+
+    const data = await response.json();
+
+    console.log(data);
+});
+
+
