@@ -59,16 +59,28 @@ function createHabit(habitText, checked = false){
 
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
 }
-addHabitBtn.addEventListener("click", function(){
+addHabitBtn.addEventListener("click", async function(){
 
     const habitText = habitInput.value;
 
     if(habitText != ""){
+        const response = await fetch(
+            "http://localhost:5000/api/habits",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                },
+                body:JSON.stringify({
+                    name:habitText
+                })
 
-        createHabit(habitText);
-        saveHabits();
+
+            }
+        );
+        const newHabit = await response.json();
+        createHabit(newHabit.name);
         habitInput.value = "";
-
     }
     else{
         alert("Please enter a habit");
@@ -100,15 +112,13 @@ function saveHabits(){
     localStorage.setItem("Habits",JSON.stringify(arr));
 }
 
-const habits = JSON.parse(localStorage.getItem("Habits"));
-if(habits){
-    habits.forEach(function(habit){
-        createHabit(habit.text, habit.checked);
-    });
+// const habits = JSON.parse(localStorage.getItem("Habits"));
+// if(habits){
+//     habits.forEach(function(habit){
+//         createHabit(habit.text, habit.checked);
+//     });
 
-}
-
-
+// }
 
 //testing
 const testBtn = document.getElementById("test-btn");
@@ -121,4 +131,17 @@ testBtn.addEventListener("click", async () => {
     console.log(data);
 });
 
+async function loadHabits() {
 
+    const response = await fetch(
+        "http://localhost:5000/api/habits"
+    );
+
+    const habits = await response.json();
+
+    habits.forEach(function(habit) {
+        createHabit(habit.name, habit.completed);
+    });
+}
+
+loadHabits();
