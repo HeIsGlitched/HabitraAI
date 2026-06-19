@@ -22,13 +22,14 @@ const habitInput = document.querySelector("#habit-input");
 const addHabitBtn = document.querySelector("#add-habit-btn");
 const habitsContainer = document.querySelector(".habits");
 //function for adding habits
-function createHabit(habitText, checked = false){
+function createHabit(habit){
      const newHabit = document.createElement("div");//create a div 
         newHabit.classList.add("habit-item");// put class on that div
+        newHabit.dataset.id = habit.id; // for storing backend it
         //providing the inner HTML of div with class = habit-item
         newHabit.innerHTML = `
-        <input type="checkbox" ${checked ? "checked" : ""}>
-        <label>${habitText}</label>
+        <input type="checkbox" ${habit.completed ? "checked" : ""}>
+        <label>${habit.name}</label>
         <button type="button" class="edit-btn">Edit</button>
         <button type="button" class="delete-btn">Delete</button>
         `;
@@ -42,20 +43,47 @@ function createHabit(habitText, checked = false){
 
         //edit habits
         const editButton = newHabit.querySelector(".edit-btn");
-        editButton.addEventListener("click", function(){
-            const label = newHabit.querySelector("label");
-            const newText = prompt("Edit habit:", label.textContent);
+        editButton.addEventListener("click",async function(){
+            const label = newHabit.querySelector("label"); // select the label
+            const newText = prompt("Edit habit:", label.textContent); //take the input
             if(newText!=null && newText!=""){
-                label.textContent = newText;
-                saveHabits();
+                const habitId = newHabit.dataset.id; // stores the id of the habit to be edited
+
+                //put method in action, we send request and update in backend
+                const response= await fetch(
+                    `http://localhost:5000/api/habits/${habitId}`,
+                    {
+                        method : "PUT",
+                        headers:{
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name:newText
+                        })
+                    }
+                )
+                const updatedHabit = await response.json(); // backend sends response
+                label.textContent = updatedHabit.name; // UI update
             }
         })
-        newDeleteButton.addEventListener("click", function(){
-            const habitItem = newDeleteButton.parentElement;
-            habitItem.remove();
-            updateProgress();
-            saveHabits();
-        });
+        newDeleteButton.addEventListener("click", async function(){
+
+    const habitItem = newDeleteButton.parentElement;
+
+    const habitId = habitItem.dataset.id;
+
+    await fetch(
+        `http://localhost:5000/api/habits/${habitId}`,
+        {
+            method: "DELETE"
+        }
+    );
+
+    habitItem.remove();
+
+    updateProgress();
+``
+});
 
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
 }
@@ -79,7 +107,7 @@ addHabitBtn.addEventListener("click", async function(){
             }
         );
         const newHabit = await response.json();
-        createHabit(newHabit.name);
+        createHabit(newHabit);
         habitInput.value = "";
     }
     else{
@@ -140,7 +168,7 @@ async function loadHabits() {
     const habits = await response.json();
 
     habits.forEach(function(habit) {
-        createHabit(habit.name, habit.completed);
+        createHabit(habit);
     });
 }
 

@@ -42,3 +42,34 @@ app.post("/api/habits", (req, res)=>{
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+app.delete("/api/habits/:id", (req, res) => {
+
+    const habitId = Number(req.params.id);
+
+    habits = habits.filter(function(habit){
+        return habit.id !== habitId;
+    });
+
+    res.json({
+        message: "Habit deleted"
+    });
+
+});
+
+app.put("/api/habits/:id", (req, res) => {
+
+    const habitId = Number(req.params.id);
+
+    const habit = habits.find(function(habit){
+        return habit.id === habitId;
+    });
+
+    if(habit){
+        habit.name = req.body.name;
+    }
+
+    res.json(habit);
+
+});
