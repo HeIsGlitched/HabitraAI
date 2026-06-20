@@ -25,7 +25,7 @@ const habitsContainer = document.querySelector(".habits");
 function createHabit(habit){
      const newHabit = document.createElement("div");//create a div 
         newHabit.classList.add("habit-item");// put class on that div
-        newHabit.dataset.id = habit.id; // for storing backend it
+        newHabit.dataset.id = habit._id; // for storing backend it
         //providing the inner HTML of div with class = habit-item
         newHabit.innerHTML = `
         <input type="checkbox" ${habit.completed ? "checked" : ""}>
@@ -35,10 +35,25 @@ function createHabit(habit){
         `;
         habitsContainer.appendChild(newHabit);//add this newhabit(div) into habits container
         const newCheckbox = newHabit.querySelector("input"); //find the input in div we created above
-        newCheckbox.addEventListener("change", function(){
-            updateProgress();
-            saveHabits();
-        }); //if the state of input of div we selected changes, run the function
+       newCheckbox.addEventListener("change", async function(){
+
+    const habitId = newHabit.dataset.id;
+
+    await fetch(
+        `http://localhost:5000/api/habits/${habitId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                completed: newCheckbox.checked
+            })
+        }
+    );
+
+    updateProgress();
+}); //if the state of input of div we selected changes, run the function
         const newDeleteButton = newHabit.querySelector(".delete-btn");
 
         //edit habits
@@ -82,7 +97,6 @@ function createHabit(habit){
     habitItem.remove();
 
     updateProgress();
-``
 });
 
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
