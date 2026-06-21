@@ -1,4 +1,3 @@
-const checkboxes = document.querySelectorAll('input[type="checkbox"]'); //find all the checkboxes
 const progressText = document.querySelector("#progress-text"); //find the element with id = progress-text
 function updateProgress(){
     const checkboxes = document.querySelectorAll('input[type="checkbox"]'); //find all the checkboxes
@@ -10,11 +9,6 @@ function updateProgress(){
     });
     progressText.textContent = `Completed : ${completed}/${checkboxes.length}`; //updating the progress
 };
-
-checkboxes.forEach(function(checkbox){//for all of the checkboxes, if the state of any changes, call updateProgress function
-    checkbox.addEventListener("change", updateProgress);
-
-});
 updateProgress();
 
 //for adding habits
@@ -53,7 +47,8 @@ function createHabit(habit){
     );
 
     updateProgress();
-}); //if the state of input of div we selected changes, run the function
+}); 
+//if the state of input of div we selected changes, run the function
         const newDeleteButton = newHabit.querySelector(".delete-btn");
 
         //edit habits
@@ -136,42 +131,6 @@ logout_btn.addEventListener("click", function(){
     window.location.href = "../index.html";
 })
 
-//Local storage(stores string only) -> localStorage.setItem(key, value), .getItem()
-//array of habits -> use JSON.stringify() bcuz local storage only stores string and array of habits is an object
-// to retrieve -> use JSON.parse() bcuz we need to convert string stored in local storage back to array
-//we are putting this in a function bcuz we need to call it everytime the user add or deletes the habit, otherwise it'll only run after the page loads
-function saveHabits(){
-    let arr =[];
-    const habitItem = document.querySelectorAll(".habit-item");
-    habitItem.forEach(function(habit){
-        const label = habit.querySelector("label");
-        const checkbox = habit.querySelector("input");
-        arr.push({
-            text : label.textContent,
-            checked: checkbox.checked
-        }); // we use textContent to only get the value of the label
-    })
-    localStorage.setItem("Habits",JSON.stringify(arr));
-}
-
-// const habits = JSON.parse(localStorage.getItem("Habits"));
-// if(habits){
-//     habits.forEach(function(habit){
-//         createHabit(habit.text, habit.checked);
-//     });
-
-// }
-
-//testing
-const testBtn = document.getElementById("test-btn");
-
-testBtn.addEventListener("click", async () => {
-    const response = await fetch("http://localhost:5000/api/habits");
-
-    const data = await response.json();
-
-    console.log(data);
-});
 
 async function loadHabits() {
 
