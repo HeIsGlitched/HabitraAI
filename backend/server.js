@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 //importing habit from models
 const Habit = require("./models/Habit");
 
+//importing user from models
+const User = require("./models/User")
+
 // app stores server
 const app = express();
 app.use(cors());
@@ -34,7 +37,7 @@ app.post("/api/habits", async(req, res)=>{
     res.json(newHabit)
 })
 
-mongoose.connect("mongodb://divyanshu4987_db_user:ogqetEBOG3U0NPX8@ac-59tup7o-shard-00-00.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-01.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-02.pnzanjk.mongodb.net:27017/?ssl=true&replicaSet=atlas-hi1jtm-shard-0&authSource=admin&appName=Cluster0")
+mongoose.connect("mongodb://divyanshu4987_db_user:NTcF6dxeWCTlZMaK@ac-59tup7o-shard-00-00.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-01.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-02.pnzanjk.mongodb.net:27017/?ssl=true&replicaSet=atlas-hi1jtm-shard-0&authSource=admin&appName=Cluster0")
 .then(() => {
     console.log("MongoDB Connected");
 })
@@ -73,3 +76,48 @@ app.put("/api/habits/:id", async (req, res) => {
     res.json(updatedHabit);
 
 });
+
+
+app.post("/api/signup", async(req, res)=>{
+
+    const existingUser = await User.findOne({
+        email: req.body.email
+    });
+
+    if(existingUser){
+        return res.json({
+            message: "Email already in use"
+        });
+    }
+    
+    const newUser = await User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+    });
+
+    res.json(newUser);
+})
+
+app.post("/api/login", async(req,res)=>{
+    
+    const user = await User.findOne({
+        email:req.body.email
+    })
+
+    if(!user){
+        return res.json({
+            message: "User not found"
+        });
+    }
+
+    if(user.password != req.body.password){
+        return res.json({
+            message: "Wrong password"
+        });
+    }
+
+    res.json({
+        message: "Login successful"
+    });
+})
