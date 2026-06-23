@@ -23,18 +23,20 @@ form.addEventListener("submit", async function(event){
 
     const data = await response.json();
 
+    
     console.log(data);
-
+    
     if(data.message === "User not found"){
         alert("User not found");
         return;
     }
-
+    
     if(data.message === "Wrong password"){
         alert("Wrong password");
         return;
     }
-
+    localStorage.setItem("token",data.token);
+    
     window.location.href = "dashboard.html";
 
 });

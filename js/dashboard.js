@@ -106,7 +106,8 @@ addHabitBtn.addEventListener("click", async function(){
             {
                 method:"POST",
                 headers:{
-                    "Content-Type" : "application/json"
+                    "Content-Type" : "application/json",
+                    authorization: localStorage.getItem("token")
                 },
                 body:JSON.stringify({
                     name:habitText
@@ -135,7 +136,12 @@ logout_btn.addEventListener("click", function(){
 async function loadHabits() {
 
     const response = await fetch(
-        "http://localhost:5000/api/habits"
+        "http://localhost:5000/api/habits",
+        {
+            headers: {
+                authorization: localStorage.getItem("token")
+            }
+        }
     );
 
     const habits = await response.json();

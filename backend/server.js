@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const jwt = require("jsonwebtoken");
+
 //importing habit from models
 const Habit = require("./models/Habit");
 
@@ -23,15 +25,41 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 
+
+//middleware
+function auth(req, res, next){
+
+    const token = req.headers.authorization;
+
+    if(!token){
+        return res.json({
+            message: "No token provided"
+        });
+    }
+
+    const decoded = jwt.verify(
+        token,
+        "mysecretkey"
+    );
+
+    req.userId = decoded.userId;
+
+    next();
+}
+
 //get the data from the mongodb
-app.get("/api/habits", async (req, res) => {
-    const habits = await Habit.find();
+app.get("/api/habits", auth, async (req, res) => {
+    const habits = await Habit.find({
+        user: req.userId
+    });
+
     res.json(habits);
 });
 
-app.post("/api/habits", async(req, res)=>{
+app.post("/api/habits", auth, async(req, res)=>{
     const newHabit = await Habit.create({
-        name: req.body.name
+        name: req.body.name,
+        user: req.userId
     });
 
     res.json(newHabit)
@@ -116,8 +144,16 @@ app.post("/api/login", async(req,res)=>{
             message: "Wrong password"
         });
     }
+    
+    const token = jwt.sign(
+        {
+            userId: user._id 
+        },
+        "mysecretkey"
+ )
 
     res.json({
-        message: "Login successful"
+        message: "Login successful",
+        token:token
     });
 })
