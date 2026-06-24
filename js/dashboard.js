@@ -1,3 +1,9 @@
+//now dashboard page is protected
+const token = localStorage.getItem("token");
+if(!token){
+    window.location.href = "login.html";
+}
+
 const progressText = document.querySelector("#progress-text"); //find the element with id = progress-text
 function updateProgress(){
     const checkboxes = document.querySelectorAll('input[type="checkbox"]'); //find all the checkboxes
@@ -129,6 +135,7 @@ addHabitBtn.addEventListener("click", async function(){
 //for logging out
 const logout_btn = document.querySelector("#logout-btn");
 logout_btn.addEventListener("click", function(){
+    localStorage.removeItem("token");
     window.location.href = "../index.html";
 })
 
