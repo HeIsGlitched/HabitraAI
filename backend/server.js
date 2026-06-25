@@ -1,4 +1,5 @@
 //import express, cors, mongoose
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -41,7 +42,7 @@ function auth(req, res, next){
 
     const decoded = jwt.verify(
         token,
-        "mysecretkey"
+        process.env.JWT_SECRET
     );
 
     req.userId = decoded.userId;
@@ -67,7 +68,7 @@ app.post("/api/habits", auth, async(req, res)=>{
     res.json(newHabit)
 })
 
-mongoose.connect("mongodb://divyanshu4987_db_user:NTcF6dxeWCTlZMaK@ac-59tup7o-shard-00-00.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-01.pnzanjk.mongodb.net:27017,ac-59tup7o-shard-00-02.pnzanjk.mongodb.net:27017/?ssl=true&replicaSet=atlas-hi1jtm-shard-0&authSource=admin&appName=Cluster0")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("MongoDB Connected");
 })
@@ -160,7 +161,7 @@ if(!isMatch){
         {
             userId: user._id 
         },
-        "mysecretkey"
+        process.env.JWT_SECRET
  )
 
     res.json({
