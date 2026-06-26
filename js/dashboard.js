@@ -26,9 +26,14 @@ function createHabit(habit){
      const newHabit = document.createElement("div");//create a div 
         newHabit.classList.add("habit-item");// put class on that div
         newHabit.dataset.id = habit._id; // for storing backend it
+        const today = new Date().toDateString();
+
+const completedToday = habit.completedDates.find(function(date){
+    return new Date(date).toDateString() === today;
+});
         //providing the inner HTML of div with class = habit-item
         newHabit.innerHTML = `
-        <input type="checkbox" ${habit.completed ? "checked" : ""}>
+        <input type="checkbox" ${completedToday ? "checked" : ""}>
         <label>${habit.name}</label>
         <button type="button" class="edit-btn">Edit</button>
         <button type="button" class="delete-btn">Delete</button>
@@ -40,15 +45,12 @@ function createHabit(habit){
     const habitId = newHabit.dataset.id;
 
     await fetch(
-        `http://localhost:5000/api/habits/${habitId}`,
+        `http://localhost:5000/api/habits/${habitId}/toggle`,
         {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                completed: newCheckbox.checked
-            })
+            authorization: localStorage.getItem("token")
+        }
         }
     );
 
@@ -71,7 +73,8 @@ function createHabit(habit){
                     {
                         method : "PUT",
                         headers:{
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            authorization: localStorage.getItem("token")
                         },
                         body: JSON.stringify({
                             name:newText
@@ -91,7 +94,10 @@ function createHabit(habit){
     await fetch(
         `http://localhost:5000/api/habits/${habitId}`,
         {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+            authorization: localStorage.getItem("token")
+        }
         }
     );
 

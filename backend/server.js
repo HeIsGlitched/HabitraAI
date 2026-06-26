@@ -35,19 +35,31 @@ function auth(req, res, next){
     const token = req.headers.authorization;
 
     if(!token){
-        return res.json({
+        return res.status(401).json({
             message: "No token provided"
         });
     }
 
-    const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET
-    );
+    try{
 
-    req.userId = decoded.userId;
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
 
-    next();
+        req.userId = decoded.userId;
+
+        next();
+
+    }
+    catch(error){
+
+        return res.status(401).json({
+            message: "Invalid token"
+        });
+
+    }
+
 }
 
 //get the data from the mongodb
@@ -82,10 +94,18 @@ app.listen(PORT, () => {
 });
 
 
-app.delete("/api/habits/:id", async (req, res) => {
+app.delete("/api/habits/:id",auth , async (req, res) => {
 
-    await Habit.findByIdAndDelete(req.params.id);
-
+    const deletedHabit = await Habit.findOneAndDelete({
+    _id: req.params.id,
+    user: req.userId
+});
+    
+    if(!deletedHabit){
+    return res.status(404).json({
+        message: "Habit not found"
+    });
+}
     res.json({
         message: "Habit deleted"
     });
@@ -93,19 +113,53 @@ app.delete("/api/habits/:id", async (req, res) => {
 });
 
 
-app.put("/api/habits/:id", async (req, res) => {
+app.put("/api/habits/:id",auth , async (req, res) => {
 
-    const updatedHabit =
-    await Habit.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-            new: true
-        }
-    );
-
+    const updatedHabit = await Habit.findOneAndUpdate(
+    {
+        _id: req.params.id,
+        user: req.userId
+    },
+    req.body,
+    {
+        new: true
+    }
+);
+    if(!updatedHabit){
+    return res.status(404).json({
+        message: "Habit not found"
+    });
+}
     res.json(updatedHabit);
 
+});
+
+app.put("/api/habits/:id/toggle", auth, async (req, res) => {
+    const habit = await Habit.findOne({
+        _id: req.params.id,
+        user: req.userId
+    });
+
+    if(!habit){
+        return res.status(404).json({
+            message: "Habit not found"
+        });
+    }
+
+    const today = new Date();
+    const alreadyCompleted = habit.completedDates.find(function(date){
+        return date.toDateString() === today.toDateString();
+    });
+    if(!alreadyCompleted){
+        habit.completedDates.push(today);
+    }
+    else{
+        habit.completedDates = habit.completedDates.filter(function(date){
+            return date.toDateString() !== today.toDateString();
+        });
+    }
+    await habit.save();
+    res.json(habit);
 });
 
 
