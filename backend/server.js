@@ -62,13 +62,70 @@ function auth(req, res, next){
 
 }
 
+function calculateStreak(completedDates){
+    if(completedDates.length === 0){
+        return 0;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dates = completedDates.map(function(date){
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    });
+    dates.sort(function(a, b){
+        return b - a;
+    });
+
+    const completedToday = dates.find(function(date){
+        return date.getTime() === today.getTime();
+    });
+
+    if(!completedToday){
+        return 0;
+    }
+
+    let streak = 1;
+    let currentDate = new Date(today);
+    
+    while(true){
+    
+        currentDate.setDate(currentDate.getDate() - 1);
+    
+        const found = dates.find(function(date){
+            return date.getTime() === currentDate.getTime();
+        });
+    
+        if(found){
+            streak++;
+        }
+        else{
+            break;
+        }
+    
+    }
+    
+    return streak;
+}
+
 //get the data from the mongodb
 app.get("/api/habits", auth, async (req, res) => {
+
     const habits = await Habit.find({
         user: req.userId
     });
 
-    res.json(habits);
+    const habitsWithStreak = habits.map(function(habit){
+
+        return {
+            ...habit.toObject(),
+            streak: calculateStreak(habit.completedDates)
+        };
+
+    });
+
+    res.json(habitsWithStreak);
+
 });
 
 app.post("/api/habits", auth, async(req, res)=>{
@@ -159,7 +216,11 @@ app.put("/api/habits/:id/toggle", auth, async (req, res) => {
         });
     }
     await habit.save();
-    res.json(habit);
+    const habitObject = habit.toObject();
+
+habitObject.streak = calculateStreak(habit.completedDates);
+
+res.json(habitObject);
 });
 
 
