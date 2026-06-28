@@ -31,28 +31,33 @@ function createHabit(habit){
 const completedToday = habit.completedDates.find(function(date){
     return new Date(date).toDateString() === today;
 });
-        //providing the inner HTML of div with class = habit-item
-        newHabit.innerHTML = `
-        <input type="checkbox" ${completedToday ? "checked" : ""}>
-        <label>${habit.name}</label>
-        <button type="button" class="edit-btn">Edit</button>
-        <button type="button" class="delete-btn">Delete</button>
-        `;
+//providing the inner HTML of div with class = habit-item
+newHabit.innerHTML = `
+<input type="checkbox" ${completedToday ? "checked" : ""}>
+<label>${habit.name}</label>
+<span class="habit-streak">🔥 ${habit.streak}</span>
+<button type="button" class="edit-btn">Edit</button>
+<button type="button" class="delete-btn">Delete</button>
+`;
         habitsContainer.appendChild(newHabit);//add this newhabit(div) into habits container
         const newCheckbox = newHabit.querySelector("input"); //find the input in div we created above
+        const streakSpan = newHabit.querySelector(".habit-streak");
        newCheckbox.addEventListener("change", async function(){
 
     const habitId = newHabit.dataset.id;
 
-    await fetch(
-        `http://localhost:5000/api/habits/${habitId}/toggle`,
-        {
-            method: "PUT",
-            headers: {
+    const response = await fetch(
+    `http://localhost:5000/api/habits/${habitId}/toggle`,
+    {
+        method: "PUT",
+        headers: {
             authorization: localStorage.getItem("token")
         }
-        }
-    );
+    }
+);
+
+const updatedHabit = await response.json();
+streakSpan.textContent = `🔥 ${updatedHabit.streak}`;
 
     updateProgress();
 }); 
