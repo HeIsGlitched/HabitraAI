@@ -83,3 +83,31 @@ main h2{
 .edit-btn{
     padding: 6px 12px;
 }
+
+.week-labels,
+.week-boxes{
+    display:flex;
+    gap:10px;
+}
+
+.week-labels{
+    margin-bottom:8px;
+}
+
+.day-box{
+    width:18px;
+    height:18px;
+    border-radius:4px;
+}
+
+.completed{
+    background:#22c55e;
+}
+
+.missed{
+    background:#ef4444;
+}
+
+.future{
+    background:#9ca3af;
+}

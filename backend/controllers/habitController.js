@@ -1,17 +1,25 @@
 const Habit = require("../models/Habit");
 const calculateStreak = require("../utils/calculateStreak");
+const calculateGlobalStreak = require("../utils/calculateGlobalStreak");
+const calculateWeekHistory = require("../utils/calculateWeekHistory");
 
 async function getHabits(req, res){
     const habits = await Habit.find({
-            user: req.userId
-        });
+        user: req.userId
+    });
+    const globalStreak = calculateGlobalStreak(habits);
+    const weekHistory = calculateWeekHistory(habits);
         const habitsWithStreak = habits.map(function(habit){
             return {
                 ...habit.toObject(),
                 streak: calculateStreak(habit.completedDates)
             };
         });
-        res.json(habitsWithStreak);
+        res.json({
+    habits: habitsWithStreak,
+    globalStreak: globalStreak,
+    weekHistory: weekHistory
+});
 }
 
 async function createHabit(req, res){
@@ -85,10 +93,19 @@ async function toggleHabit(req,res){
     }
     await habit.save();
     const habitObject = habit.toObject();
+    habitObject.streak = calculateStreak(habit.completedDates);
+    const habits = await Habit.find({
+        user: req.userId
+    });
+    const globalStreak = calculateGlobalStreak(habits);
+    const weekHistory = calculateWeekHistory(habits);
 
-habitObject.streak = calculateStreak(habit.completedDates);
+    res.json({
+    habit: habitObject,
+    globalStreak: globalStreak,
+    weekHistory: weekHistory
+});
 
-res.json(habitObject);
 }
 
 module.exports = {

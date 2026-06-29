@@ -4,6 +4,8 @@ if(!token){
     window.location.href = "login.html";
 }
 
+const weekBoxes = document.querySelector(".week-boxes");
+const globalStreak = document.querySelector("#global-streak");
 const progressText = document.querySelector("#progress-text"); //find the element with id = progress-text
 function updateProgress(){
     const checkboxes = document.querySelectorAll('input[type="checkbox"]'); //find all the checkboxes
@@ -56,8 +58,11 @@ newHabit.innerHTML = `
     }
 );
 
-const updatedHabit = await response.json();
-streakSpan.textContent = `🔥 ${updatedHabit.streak}`;
+const data = await response.json();
+
+streakSpan.textContent = `🔥 ${data.habit.streak}`;
+globalStreak.textContent = `Current Streak : ${data.globalStreak} days`;
+renderWeekHistory(data.weekHistory);
 
     updateProgress();
 }); 
@@ -150,6 +155,31 @@ logout_btn.addEventListener("click", function(){
     window.location.href = "../index.html";
 })
 
+function renderWeekHistory(weekHistory) {
+
+    weekBoxes.innerHTML = "";
+
+    weekHistory.forEach(function(day) {
+
+        const box = document.createElement("div");
+
+        box.classList.add("day-box");
+
+        if (day === true) {
+            box.classList.add("completed");
+        }
+        else if (day === false) {
+            box.classList.add("missed");
+        }
+        else {
+            box.classList.add("future");
+        }
+
+        weekBoxes.appendChild(box);
+
+    });
+
+}
 
 async function loadHabits() {
 
@@ -162,9 +192,10 @@ async function loadHabits() {
         }
     );
 
-    const habits = await response.json();
-
-    habits.forEach(function(habit) {
+    const data = await response.json();
+    globalStreak.textContent =`Current Streak : ${data.globalStreak} days`;
+    renderWeekHistory(data.weekHistory);
+    data.habits.forEach(function(habit) {
         createHabit(habit);
     });
 }
