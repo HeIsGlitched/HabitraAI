@@ -61,9 +61,7 @@ newHabit.innerHTML = `
 const data = await response.json();
 
 streakSpan.textContent = `🔥 ${data.habit.streak}`;
-globalStreak.textContent = `Current Streak : ${data.globalStreak} days`;
-renderWeekHistory(data.weekHistory);
-
+globalStreak.textContent = `${data.globalStreak} Days`;
     updateProgress();
 }); 
 //if the state of input of div we selected changes, run the function
@@ -193,7 +191,7 @@ async function loadHabits() {
     );
 
     const data = await response.json();
-    globalStreak.textContent =`Current Streak : ${data.globalStreak} days`;
+    globalStreak.textContent = `${data.globalStreak} Days`;
     renderWeekHistory(data.weekHistory);
     data.habits.forEach(function(habit) {
         createHabit(habit);
