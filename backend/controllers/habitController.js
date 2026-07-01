@@ -23,14 +23,25 @@ async function getHabits(req, res){
 }
 
 async function createHabit(req, res){
+
     const newHabit = await Habit.create({
         name: req.body.name,
         user: req.userId
     });
+
+    const habits = await Habit.find({
+        user: req.userId
+    });
+
     const habitObject = newHabit.toObject();
     habitObject.streak = calculateStreak(newHabit.completedDates);
-    res.json(habitObject);
-    
+
+    res.json({
+        habit: habitObject,
+        globalStreak: calculateGlobalStreak(habits),
+        weekHistory: calculateWeekHistory(habits)
+    });
+
 }
 async function updateHabit(req, res){
     const updatedHabit = await Habit.findOneAndUpdate(
@@ -52,19 +63,28 @@ async function updateHabit(req, res){
 }
 
 async function deleteHabit(req, res){
-        const deletedHabit = await Habit.findOneAndDelete({
-    _id: req.params.id,
-    user: req.userId
-});
-    
+
+    const deletedHabit = await Habit.findOneAndDelete({
+        _id: req.params.id,
+        user: req.userId
+    });
+
     if(!deletedHabit){
-    return res.status(404).json({
-        message: "Habit not found"
+        return res.status(404).json({
+            message: "Habit not found"
+        });
+    }
+
+    const habits = await Habit.find({
+        user: req.userId
     });
-}
+
     res.json({
-        message: "Habit deleted"
+        message: "Habit deleted",
+        globalStreak: calculateGlobalStreak(habits),
+        weekHistory: calculateWeekHistory(habits)
     });
+
 }
 
 async function toggleHabit(req,res){
