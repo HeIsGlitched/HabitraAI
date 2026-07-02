@@ -7,16 +7,47 @@ if(!token){
 const weekBoxes = document.querySelector(".week-boxes");
 const globalStreak = document.querySelector("#global-streak");
 const progressText = document.querySelector("#progress-text"); //find the element with id = progress-text
+const progressFill = document.querySelector("#progress-fill");
+const welcomeText = document.querySelector("#welcome-text");
+async function loadUser(){
+
+    const response = await fetch(
+        "http://localhost:5000/api/me",
+        {
+            headers:{
+                authorization: localStorage.getItem("token")
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    welcomeText.textContent = `Welcome Back, ${data.name}`;
+
+}
 function updateProgress(){
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]'); //find all the checkboxes
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
     let completed = 0;
-    checkboxes.forEach(function(checkbox){//for each checkbox, check whether they're checked or not
+
+    checkboxes.forEach(function(checkbox){
         if(checkbox.checked){
             completed++;
         }
     });
-    progressText.textContent = `Completed : ${completed}/${checkboxes.length}`; //updating the progress
-};
+
+    progressText.textContent = `${completed} / ${checkboxes.length}`;
+
+    let percentage = 0;
+
+    if(checkboxes.length > 0){
+        percentage = (completed / checkboxes.length) * 100;
+    }
+
+    progressFill.style.width = `${percentage}%`;
+
+}
 updateProgress();
 
 //for adding habits
@@ -62,6 +93,7 @@ const data = await response.json();
 
 streakSpan.textContent = `🔥 ${data.habit.streak}`;
 globalStreak.textContent = `${data.globalStreak} Days`;
+renderWeekHistory(data.weekHistory);
     updateProgress();
 }); 
 //if the state of input of div we selected changes, run the function
@@ -99,19 +131,24 @@ globalStreak.textContent = `${data.globalStreak} Days`;
 
     const habitId = habitItem.dataset.id;
 
-    await fetch(
-        `http://localhost:5000/api/habits/${habitId}`,
-        {
-            method: "DELETE",
-            headers: {
+    const response = await fetch(
+    `http://localhost:5000/api/habits/${habitId}`,
+    {
+        method: "DELETE",
+        headers: {
             authorization: localStorage.getItem("token")
         }
-        }
-    );
+    }
+);
 
-    habitItem.remove();
+const data = await response.json();
 
-    updateProgress();
+habitItem.remove();
+
+globalStreak.textContent = `${data.globalStreak} Days`;
+renderWeekHistory(data.weekHistory);
+
+updateProgress();
 });
 
         updateProgress(); //if add habit button is clicked, run the function to recalculate the progress
@@ -136,9 +173,16 @@ addHabitBtn.addEventListener("click", async function(){
 
             }
         );
-        const newHabit = await response.json();
-        createHabit(newHabit);
-        habitInput.value = "";
+        const data = await response.json();
+
+createHabit(data.habit);
+
+globalStreak.textContent = `${data.globalStreak} Days`;
+renderWeekHistory(data.weekHistory);
+
+habitInput.value = "";
+
+updateProgress();
     }
     else{
         alert("Please enter a habit");
@@ -199,3 +243,12 @@ async function loadHabits() {
 }
 
 loadHabits();
+loadUser();
+
+const historyBtn = document.querySelector("#history-btn");
+
+historyBtn.addEventListener("click", function(){
+
+    window.location.href = "history.html";
+
+});

@@ -8,10 +8,13 @@
 <body>
     <header>
         <h1>HabitraAI</h1>
-        <button id="logout-btn">Log Out</button>
+        <div class="header-buttons">
+            <button id="history-btn">History</button>
+            <button id="logout-btn">Log Out</button>
+        </div>
     </header>
     <main>
-        <h2>Welcome Back,User</h2>
+        <h2 id="welcome-text">Welcome Back, User</h2>
         <div class="top-cards">
             <section class="streak-card">
                 <h3>🔥 Current Streak</h3>
@@ -48,8 +51,20 @@
 
         </section>
         <section class="progress">
-            <h2 id="progress-text">Completed : 2/4</h2>
-        </section>
+
+    <h3>Today's Progress</h3>
+
+    <div class="progress-bar">
+
+        <div id="progress-fill"></div>
+
+    </div>
+
+    <p id="progress-text">
+        0 / 0
+    </p>
+
+</section>
     </main>
     <script src="../js/dashboard.js"></script>
 </body>
