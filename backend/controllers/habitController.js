@@ -128,10 +128,73 @@ async function toggleHabit(req,res){
 
 }
 
+async function getHistory(req, res){
+
+    const habits = await Habit.find({
+        user: req.userId
+    });
+
+    res.json({
+        habits: habits
+    });
+
+}
+
+async function toggleHistory(req, res){
+
+    const habit = await Habit.findOne({
+        _id: req.params.id,
+        user: req.userId
+    });
+
+    if(!habit){
+        return res.status(404).json({
+            message: "Habit not found"
+        });
+    }
+
+    const selectedDate = new Date(req.body.date);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    const existingDate = habit.completedDates.find(function(date){
+
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+
+        return d.getTime() === selectedDate.getTime();
+
+    });
+
+    if(existingDate){
+
+        habit.completedDates = habit.completedDates.filter(function(date){
+
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+
+            return d.getTime() !== selectedDate.getTime();
+
+        });
+
+    }
+    else{
+
+        habit.completedDates.push(selectedDate);
+
+    }
+
+    await habit.save();
+
+    res.json(habit);
+
+}
+
 module.exports = {
     getHabits,
     createHabit,
     updateHabit,
     deleteHabit,
-    toggleHabit
+    toggleHabit,
+    getHistory,
+    toggleHistory
 };

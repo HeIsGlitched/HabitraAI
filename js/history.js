@@ -1,11 +1,12 @@
 const historyHabits = document.querySelector(".history-habits");
 const historyDate = document.querySelector("#history-date");
 const historyList = document.querySelector(".history-list");
-const selectedDate = document.querySelector("#selected-date");
 const calendarGrid = document.querySelector(".calendar-grid");
 const monthTitle = document.querySelector("#month-title");
+let habits = [];
 
 const today = new Date();
+today.setHours(0, 0, 0, 0);
 
 const year = today.getFullYear();
 const month = today.getMonth();
@@ -40,16 +41,108 @@ for(let day = 1; day <= daysInMonth; day++){
 
     box.textContent = day;
 
-    box.addEventListener("click", function(){
-        if(selectedDay){
-            selectedDay.classList.remove("selected-day");
-        }
-        box.classList.add("selected-day");
-        selectedDay = box;
-        historyHabits.style.display = "block";
-        historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
-    });
+    const boxDate = new Date(year, month, day);
+    boxDate.setHours(0, 0, 0, 0);
+
+    if(boxDate <= today){
+
+        box.addEventListener("click", function(){
+
+            if(selectedDay){
+                selectedDay.classList.remove("selected-day");
+            }
+
+            box.classList.add("selected-day");
+
+            selectedDay = box;
+
+            historyHabits.style.display = "block";
+
+            historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
+
+            showHabits(day);
+
+        });
+
+    }
+    else{
+
+        box.classList.add("future-day");
+
+    }
 
     calendarGrid.appendChild(box);
+
+}
+
+async function loadHistory(){
+
+    const response = await fetch(
+        "http://localhost:5000/api/habits/history",
+        {
+            headers:{
+                authorization: localStorage.getItem("token")
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    habits = data.habits;
+
+}
+loadHistory();
+
+function showHabits(day){
+
+    historyList.innerHTML = "";
+
+    habits.forEach(function(habit){
+
+        const completed = habit.completedDates.find(function(date){
+
+            const d = new Date(date);
+
+            return (
+                d.getDate() === day &&
+                d.getMonth() === month &&
+                d.getFullYear() === year
+            );
+
+        });
+
+        const label = document.createElement("label");
+
+label.innerHTML = `
+    <input type="checkbox" ${completed ? "checked" : ""}>
+    ${habit.name}
+`;
+
+const checkbox = label.querySelector("input");
+
+checkbox.addEventListener("change", async function(){
+
+    await fetch(
+        `http://localhost:5000/api/habits/${habit._id}/history`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                date: `${year}-${month + 1}-${day}`
+            })
+        }
+    );
+
+});
+
+historyList.appendChild(label);
+
+historyList.appendChild(document.createElement("br"));
+historyList.appendChild(document.createElement("br"));
+
+    });
 
 }
