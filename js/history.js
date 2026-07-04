@@ -8,72 +8,87 @@ let habits = [];
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-const year = today.getFullYear();
-const month = today.getMonth();
+let year = today.getFullYear();
+let month = today.getMonth();
+
+const prevMonthBtn = document.querySelector("#prev-month");
+const nextMonthBtn = document.querySelector("#next-month");
 
 const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
 ];
 
-monthTitle.textContent = `${monthNames[month]} ${year}`;
-let selectedDay = null;
-
-const firstDay = new Date(year, month, 1).getDay();
-
-const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-// Empty boxes before the 1st
-for(let i = 0; i < firstDay; i++){
-
-    const empty = document.createElement("div");
-
-    calendarGrid.appendChild(empty);
-
-}
-
-// Actual days
-for(let day = 1; day <= daysInMonth; day++){
-
-    const box = document.createElement("div");
-
-    box.classList.add("calendar-day");
-
-    box.textContent = day;
-
-    const boxDate = new Date(year, month, day);
-    boxDate.setHours(0, 0, 0, 0);
-
-    if(boxDate <= today){
-
-        box.addEventListener("click", function(){
-
-            if(selectedDay){
-                selectedDay.classList.remove("selected-day");
-            }
-
-            box.classList.add("selected-day");
-
-            selectedDay = box;
-
-            historyHabits.style.display = "block";
-
-            historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
-
-            showHabits(day);
-
-        });
-
+function renderCalendar(){
+    calendarGrid.innerHTML = "";
+    historyHabits.style.display = "none";
+    historyList.innerHTML = "";
+    monthTitle.textContent = `${monthNames[month]} ${year}`;
+    if(year === today.getFullYear() && month === today.getMonth()){
+        nextMonthBtn.disabled = true;
     }
     else{
-
-        box.classList.add("future-day");
-
+        nextMonthBtn.disabled = false;
     }
-
-    calendarGrid.appendChild(box);
-
+    let selectedDay = null;
+    
+    const firstDay = new Date(year, month, 1).getDay();
+    
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Empty boxes before the 1st
+    for(let i = 0; i < firstDay; i++){
+    
+        const empty = document.createElement("div");
+    
+        calendarGrid.appendChild(empty);
+    
+    }
+    // Actual days
+    for(let day = 1; day <= daysInMonth; day++){
+    
+        const box = document.createElement("div");
+    
+        box.classList.add("calendar-day");
+    
+        box.textContent = day;
+    
+        const boxDate = new Date(year, month, day);
+        boxDate.setHours(0, 0, 0, 0);
+    
+        if(boxDate <= today){
+    
+            box.addEventListener("click", function(){
+    
+                if(selectedDay){
+                    selectedDay.classList.remove("selected-day");
+                }
+    
+                box.classList.add("selected-day");
+    
+                selectedDay = box;
+    
+                historyHabits.style.display = "block";
+    
+                historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
+    
+                showHabits(day);
+    
+            });
+    
+        }
+        else{
+    
+            box.classList.add("future-day");
+    
+        }
+    
+        calendarGrid.appendChild(box);
+    
+    }
 }
+renderCalendar();
+
 
 async function loadHistory(){
 
@@ -146,3 +161,32 @@ historyList.appendChild(document.createElement("br"));
     });
 
 }
+
+nextMonthBtn.addEventListener("click", function(){
+    if(year === today.getFullYear() && month === today.getMonth()){
+        return;
+    }
+
+    month++;
+
+    if(month > 11){
+        month = 0;
+        year++;
+    }
+
+    renderCalendar();
+
+});
+
+prevMonthBtn.addEventListener("click", function(){
+
+    month--;
+
+    if(month < 0){
+        month = 11;
+        year--;
+    }
+
+    renderCalendar();
+
+});
