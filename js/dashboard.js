@@ -244,11 +244,29 @@ async function loadHabits() {
 
 loadHabits();
 loadUser();
+const menuBtn = document.querySelector("#menu-btn");
+const dropdownMenu = document.querySelector(".dropdown-menu");
+menuBtn.addEventListener("click", function(){
 
-const historyBtn = document.querySelector("#history-btn");
+    if(dropdownMenu.style.display === "block"){
 
-historyBtn.addEventListener("click", function(){
+        dropdownMenu.style.display = "none";
 
-    window.location.href = "history.html";
+    }
+    else{
+
+        dropdownMenu.style.display = "block";
+
+    }
+
+});
+document.addEventListener("click", function(event){
+
+    if(
+        !menuBtn.contains(event.target) &&
+        !dropdownMenu.contains(event.target)
+    ){
+        dropdownMenu.style.display = "none";
+    }
 
 });

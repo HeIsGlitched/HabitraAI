@@ -462,3 +462,73 @@ button:hover{
     opacity:0.4;
     cursor:not-allowed;
 }
+
+.menu-container{
+
+    position:relative;
+
+}
+
+#menu-btn{
+
+    width:44px;
+    height:44px;
+
+    font-size:22px;
+
+    border-radius:10px;
+
+}
+
+.dropdown-menu{
+
+    display:none;
+
+    position:absolute;
+
+    top:55px;
+    right:0;
+
+    width:180px;
+
+    background:#1b1b1b;
+
+    border:1px solid #2f2f2f;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    z-index:100;
+
+}
+
+.dropdown-menu a,
+.dropdown-menu button{
+
+    display:block;
+
+    width:100%;
+
+    padding:14px 18px;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    text-align:left;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover{
+
+    background:#2b2b2b;
+
+}
