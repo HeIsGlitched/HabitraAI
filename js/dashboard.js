@@ -9,6 +9,7 @@ const globalStreak = document.querySelector("#global-streak");
 const progressText = document.querySelector("#progress-text"); //find the element with id = progress-text
 const progressFill = document.querySelector("#progress-fill");
 const welcomeText = document.querySelector("#welcome-text");
+const userName = document.querySelector("#user-name");
 async function loadUser(){
 
     const response = await fetch(
@@ -23,6 +24,7 @@ async function loadUser(){
     const data = await response.json();
 
     welcomeText.textContent = `Welcome Back, ${data.name}`;
+    userName.textContent = data.name;
 
 }
 function updateProgress(){
@@ -244,29 +246,28 @@ async function loadHabits() {
 
 loadHabits();
 loadUser();
-const menuBtn = document.querySelector("#menu-btn");
+const profileBtn = document.querySelector("#profile-btn");
 const dropdownMenu = document.querySelector(".dropdown-menu");
-menuBtn.addEventListener("click", function(){
+
+profileBtn.addEventListener("click", function(){
 
     if(dropdownMenu.style.display === "block"){
-
         dropdownMenu.style.display = "none";
-
     }
     else{
-
         dropdownMenu.style.display = "block";
-
     }
 
 });
+
 document.addEventListener("click", function(event){
 
     if(
-        !menuBtn.contains(event.target) &&
+        !profileBtn.contains(event.target) &&
         !dropdownMenu.contains(event.target)
     ){
         dropdownMenu.style.display = "none";
     }
 
 });
+

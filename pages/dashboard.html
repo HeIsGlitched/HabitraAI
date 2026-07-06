@@ -9,18 +9,29 @@
     <header>
         <h1>HabitraAI</h1>
         <div class="menu-container">
-            <button id="menu-btn">
-                ☰
-            </button>
+            <div id="profile-btn">
+                <img src="../images/default-picture.png" alt="Profile">
+            </div>
         
             <div class="dropdown-menu">
+                <div class="dropdown-profile">
         
-                <a href="profile.html">👤 Profile</a>
+                    <img
+                        src="../images/default-picture.png"
+                        alt="Profile"
+                    >
         
-                <a href="history.html">📅 History</a>
+                    <h4 id="user-name">
+                        Loading...
+                    </h4>
         
-                <button id="logout-btn">🚪 Logout</button>
+                </div>
+                <hr>
+                <a href="profile.html">Profile</a>
         
+                <a href="history.html">History</a>
+        
+                <button id="logout-btn">Logout</button>
             </div>
         </div>
     </header>
