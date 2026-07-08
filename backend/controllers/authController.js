@@ -66,12 +66,75 @@ async function getMe(req, res) {
     const user = await User.findById(req.userId);
 
     res.json({
-        name: user.name
+        name: user.name,
+        email: user.email
+    });
+
+}
+async function changeEmail(req, res){
+
+    const user = await User.findById(req.userId);
+
+    const correctPassword = await bcrypt.compare(
+        req.body.password,
+        user.password
+    );
+
+    if(!correctPassword){
+        return res.status(400).json({
+            message: "Incorrect password"
+        });
+    }
+
+    const existingUser = await User.findOne({
+        email: req.body.email
+    });
+
+    if(existingUser && existingUser._id.toString() !== user._id.toString()){
+        return res.status(400).json({
+            message: "Email already exists"
+        });
+    }
+
+    user.email = req.body.email;
+
+    await user.save();
+
+    res.json({
+        message: "Email updated successfully"
+    });
+
+}
+async function changePassword(req, res){
+
+    const user = await User.findById(req.userId);
+
+    const correctPassword = await bcrypt.compare(
+        req.body.currentPassword,
+        user.password
+    );
+
+    if(!correctPassword){
+        return res.status(400).json({
+            message: "Current password is incorrect"
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.newPassword, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    res.json({
+        message: "Password updated successfully"
     });
 
 }
 module.exports = {
     signup,
     login,
-    getMe
+    getMe,
+    changeEmail,
+    changePassword
 };
