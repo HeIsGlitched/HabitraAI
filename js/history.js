@@ -3,6 +3,12 @@ const historyDate = document.querySelector("#history-date");
 const historyList = document.querySelector(".history-list");
 const calendarGrid = document.querySelector(".calendar-grid");
 const monthTitle = document.querySelector("#month-title");
+const dashboardBtn = document.querySelector("#dashboard-btn");
+dashboardBtn.addEventListener("click", function(){
+
+    window.location.href = "dashboard.html";
+
+});
 let habits = [];
 
 const today = new Date();
