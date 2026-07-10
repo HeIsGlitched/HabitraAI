@@ -1,8 +1,8 @@
+require("dotenv").config();
 const habitRoutes = require("./routes/habitRoutes");
 const authRoutes = require("./routes/authRoutes");
 
 //import express, cors, mongoose
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
