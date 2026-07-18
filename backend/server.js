@@ -2,6 +2,7 @@ require("dotenv").config();
 const habitRoutes = require("./routes/habitRoutes");
 const authRoutes = require("./routes/authRoutes");
 const generateInsights = require("./utils/ai");
+const aiRoutes = require("./routes/aiRoutes");
 
 //import express, cors, mongoose
 const express = require("express");
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/habits", habitRoutes);
 app.use("/api", authRoutes);
+app.use("/api", aiRoutes);
 
 //basically browser's address
 const PORT = 5000;
