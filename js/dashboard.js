@@ -10,6 +10,8 @@ const progressText = document.querySelector("#progress-text"); //find the elemen
 const progressFill = document.querySelector("#progress-fill");
 const welcomeText = document.querySelector("#welcome-text");
 const userName = document.querySelector("#user-name");
+const refreshAiBtn = document.querySelector("#refresh-ai-btn");
+const aiInsights = document.querySelector("#ai-insights");
 async function loadUser(){
 
     const response = await fetch(
@@ -244,8 +246,45 @@ async function loadHabits() {
     });
 }
 
+async function loadAIInsights(){
+
+    aiInsights.textContent = "🧠 Analyzing your habits...";
+    refreshAiBtn.disabled = true;
+
+    try{
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+            "http://localhost:5000/api/insights",
+            {
+                method: "POST",
+                headers: {
+                    Authorization: token
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        aiInsights.textContent = data.insights;
+
+    }
+    catch(error){
+         console.error(error);
+        aiInsights.textContent =
+            "❌ Couldn't generate insights. Please try again.";
+
+    }
+    finally{
+        refreshAiBtn.disabled = false;
+    }
+
+}
+
 loadHabits();
 loadUser();
+loadAIInsights();
 const profileBtn = document.querySelector("#profile-btn");
 const dropdownMenu = document.querySelector(".dropdown-menu");
 
@@ -268,6 +307,11 @@ document.addEventListener("click", function(event){
     ){
         dropdownMenu.style.display = "none";
     }
+
+});
+refreshAiBtn.addEventListener("click", function(){
+
+    loadAIInsights();
 
 });
 
