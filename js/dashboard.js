@@ -267,7 +267,11 @@ async function loadAIInsights(){
 
         const data = await response.json();
 
-        aiInsights.textContent = data.insights;
+if (response.ok) {
+    aiInsights.textContent = data.insights;
+} else {
+    aiInsights.textContent = data.message;
+}
 
     }
     catch(error){
