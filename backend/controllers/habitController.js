@@ -1,6 +1,7 @@
 const Habit = require("../models/Habit");
 const calculateStreak = require("../utils/calculateStreak");
 const calculateGlobalStreak = require("../utils/calculateGlobalStreak");
+const User = require("../models/User");
 const calculateWeekHistory = require("../utils/calculateWeekHistory");
 
 async function getHabits(req, res){
@@ -130,12 +131,15 @@ async function toggleHabit(req,res){
 
 async function getHistory(req, res){
 
+    const user = await User.findById(req.userId);
+
     const habits = await Habit.find({
         user: req.userId
     });
 
     res.json({
-        habits: habits
+        habits: habits,
+        createdAt: user.createdAt
     });
 
 }

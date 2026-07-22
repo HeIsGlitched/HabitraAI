@@ -10,6 +10,7 @@ dashboardBtn.addEventListener("click", function(){
 
 });
 let habits = [];
+let accountCreatedAt = null;
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -62,39 +63,42 @@ function renderCalendar(){
         const boxDate = new Date(year, month, day);
         boxDate.setHours(0, 0, 0, 0);
     
-        if(boxDate <= today){
-    
-            box.addEventListener("click", function(){
-    
-                if(selectedDay){
-                    selectedDay.classList.remove("selected-day");
-                }
-    
-                box.classList.add("selected-day");
-    
-                selectedDay = box;
-    
-                historyHabits.style.display = "block";
-    
-                historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
-    
-                showHabits(day);
-    
-            });
-    
+        if (boxDate > today) {
+
+    box.classList.add("future-day");
+
+}
+else if (boxDate < accountCreatedAt) {
+
+    box.classList.add("future-day");
+
+}
+else {
+
+    box.addEventListener("click", function(){
+
+        if(selectedDay){
+            selectedDay.classList.remove("selected-day");
         }
-        else{
-    
-            box.classList.add("future-day");
-    
-        }
+
+        box.classList.add("selected-day");
+
+        selectedDay = box;
+
+        historyHabits.style.display = "block";
+
+        historyDate.textContent = `📅 ${day} ${monthNames[month]} ${year}`;
+
+        showHabits(day);
+
+    });
+
+}
     
         calendarGrid.appendChild(box);
     
     }
 }
-renderCalendar();
-
 
 async function loadHistory(){
 
@@ -109,7 +113,12 @@ async function loadHistory(){
 
     const data = await response.json();
 
-    habits = data.habits;
+habits = data.habits;
+
+accountCreatedAt = new Date(data.createdAt);
+accountCreatedAt.setHours(0, 0, 0, 0);
+
+renderCalendar();
 
 }
 loadHistory();

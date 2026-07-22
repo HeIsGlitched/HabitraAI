@@ -246,7 +246,7 @@ async function loadHabits() {
     });
 }
 
-async function loadAIInsights(){
+async function loadAIInsights(forceRefresh = false){
 
     aiInsights.textContent = "🧠 Analyzing your habits...";
     refreshAiBtn.disabled = true;
@@ -256,7 +256,7 @@ async function loadAIInsights(){
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            "http://localhost:5000/api/insights",
+            `http://localhost:5000/api/insights?refresh=${forceRefresh}`,
             {
                 method: "POST",
                 headers: {
@@ -315,7 +315,7 @@ document.addEventListener("click", function(event){
 });
 refreshAiBtn.addEventListener("click", function(){
 
-    loadAIInsights();
+    loadAIInsights(true);
 
 });
 

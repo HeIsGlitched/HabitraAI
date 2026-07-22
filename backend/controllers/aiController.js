@@ -1,11 +1,27 @@
 const Habit = require("../models/Habit");
 const generateInsights = require("../utils/ai");
+const User = require("../models/User");
 
 async function getInsights(req, res){
     try{
+        const user = await User.findById(req.userId);
         const habits = await Habit.find({
             user: req.userId
         });
+
+        const forceRefresh = req.query.refresh === "true";
+        const today = new Date().toDateString();
+
+if (
+    !forceRefresh &&
+    user.aiInsight &&
+    user.lastInsightDate &&
+    user.lastInsightDate.toDateString() === today
+) {
+    return res.json({
+        insights: user.aiInsight
+    });
+}
         if (habits.length === 0) {
 
     return res.json({
@@ -55,9 +71,14 @@ ${habitSummary}
 
     const insights = await generateInsights(prompt);
 
-    res.json({
-        insights
-    });
+user.aiInsight = insights;
+user.lastInsightDate = new Date();
+
+await user.save();
+
+return res.json({
+    insights
+});
 
     }
 
