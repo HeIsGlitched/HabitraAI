@@ -19,7 +19,7 @@ app.use("/api", authRoutes);
 app.use("/api", aiRoutes);
 
 //basically browser's address
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 //route
 app.get("/", (req, res) => {
