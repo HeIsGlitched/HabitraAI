@@ -4,6 +4,10 @@ const authRoutes = require("./routes/authRoutes");
 const generateInsights = require("./utils/ai");
 const aiRoutes = require("./routes/aiRoutes");
 
+const dns = require("dns");
+
+dns.setDefaultResultOrder("ipv4first");
+
 //import express, cors, mongoose
 const express = require("express");
 const cors = require("cors");
