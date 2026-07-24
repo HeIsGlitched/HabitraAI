@@ -134,6 +134,9 @@ async function changePassword(req, res){
 }
 
 async function forgotPassword(req, res){
+    try{
+
+    
 
     const user = await User.findOne({
         email: req.body.email
@@ -248,7 +251,14 @@ async function forgotPassword(req, res){
     res.json({
         message: "Reset code sent"
     });
+    }
+    catch (err) {
+        console.error(err);
 
+        res.status(500).json({
+            message: "Failed to send email"
+        });
+    }
 }
 
 async function verifyResetCode(req, res){
