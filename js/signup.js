@@ -6,7 +6,7 @@ const passwordInput = document.querySelector("#password");
 
 form.addEventListener("submit", async function(event){
     event.preventDefault();
-    const response = await fetch("http://localhost:5000/api/signup",
+    const response = await fetch(`${API_BASE_URL}/api/signup`,
         {
             method: "POST",
             headers: {

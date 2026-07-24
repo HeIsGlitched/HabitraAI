@@ -15,7 +15,7 @@ const aiInsights = document.querySelector("#ai-insights");
 async function loadUser(){
 
     const response = await fetch(
-        "http://localhost:5000/api/me",
+        `${API_BASE_URL}/api/me`,
         {
             headers:{
                 authorization: localStorage.getItem("token")
@@ -84,7 +84,7 @@ newHabit.innerHTML = `
     const habitId = newHabit.dataset.id;
 
     const response = await fetch(
-    `http://localhost:5000/api/habits/${habitId}/toggle`,
+    `${API_BASE_URL}/api/habits/${habitId}/toggle`,
     {
         method: "PUT",
         headers: {
@@ -113,7 +113,7 @@ renderWeekHistory(data.weekHistory);
 
                 //put method in action, we send request and update in backend
                 const response= await fetch(
-                    `http://localhost:5000/api/habits/${habitId}`,
+                    `${API_BASE_URL}/api/habits/${habitId}`,
                     {
                         method : "PUT",
                         headers:{
@@ -136,7 +136,7 @@ renderWeekHistory(data.weekHistory);
     const habitId = habitItem.dataset.id;
 
     const response = await fetch(
-    `http://localhost:5000/api/habits/${habitId}`,
+    `${API_BASE_URL}/api/habits/${habitId}`,
     {
         method: "DELETE",
         headers: {
@@ -163,7 +163,7 @@ addHabitBtn.addEventListener("click", async function(){
 
     if(habitText != ""){
         const response = await fetch(
-            "http://localhost:5000/api/habits",
+            `${API_BASE_URL}/api/habits`,
             {
                 method:"POST",
                 headers:{
@@ -230,7 +230,7 @@ function renderWeekHistory(weekHistory) {
 async function loadHabits() {
 
     const response = await fetch(
-        "http://localhost:5000/api/habits",
+        `${API_BASE_URL}/api/habits`,
         {
             headers: {
                 authorization: localStorage.getItem("token")
@@ -256,7 +256,7 @@ async function loadAIInsights(forceRefresh = false){
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-            `http://localhost:5000/api/insights?refresh=${forceRefresh}`,
+            `${API_BASE_URL}/api/insights?refresh=${forceRefresh}`,
             {
                 method: "POST",
                 headers: {

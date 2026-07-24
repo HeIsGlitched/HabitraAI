@@ -103,7 +103,7 @@ else {
 async function loadHistory(){
 
     const response = await fetch(
-        "http://localhost:5000/api/habits/history",
+        `${API_BASE_URL}/api/habits/history`,
         {
             headers:{
                 authorization: localStorage.getItem("token")
@@ -153,7 +153,7 @@ const checkbox = label.querySelector("input");
 checkbox.addEventListener("change", async function(){
 
     await fetch(
-        `http://localhost:5000/api/habits/${habit._id}/history`,
+        `${API_BASE_URL}/api/habits/${habit._id}/history`,
         {
             method: "PUT",
             headers: {

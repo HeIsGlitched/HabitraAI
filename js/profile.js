@@ -6,7 +6,7 @@ const changePasswordBtn = document.querySelector("#change-password-btn");
 async function loadProfile(){
 
     const response = await fetch(
-        "http://localhost:5000/api/me",
+        `${API_BASE_URL}/api/me`,
         {
             headers:{
                 authorization: localStorage.getItem("token")
@@ -43,7 +43,7 @@ changeEmailBtn.addEventListener("click", async function(){
 
 
     const response = await fetch(
-        "http://localhost:5000/api/me/email",
+        `${API_BASE_URL}/api/me/email`,
         {
             method: "PUT",
             headers:{
@@ -81,7 +81,7 @@ changePasswordBtn.addEventListener("click", async function(){
     }
 
     const response = await fetch(
-        "http://localhost:5000/api/me/password",
+        `${API_BASE_URL}/api/me/password`,
         {
             method: "PUT",
             headers:{

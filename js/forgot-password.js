@@ -10,7 +10,7 @@ sendCodeBtn.addEventListener("click", async function(event){
     sendCodeBtn.disabled = true;
 
     const response = await fetch(
-        "http://localhost:5000/api/forgot-password",
+        `${API_BASE_URL}/api/forgot-password`,
         {
             method: "POST",
             headers:{
@@ -70,7 +70,7 @@ resetPasswordBtn.addEventListener("click", async function(event){
     event.preventDefault();
 
     const response = await fetch(
-        "http://localhost:5000/api/reset-password",
+        `${API_BASE_URL}/api/reset-password`,
         {
             method: "PUT",
             headers:{
